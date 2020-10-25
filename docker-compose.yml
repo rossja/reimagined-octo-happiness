@@ -64,6 +64,21 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - APP_DB=${APP_DB}
 
+  ingress:
+    image: rossja/hlitw-ingress:latest
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:8080"
+      - "443:8443"
+    networks:
+      frontend:
+        aliases:
+          - proxy
+    depends_on:
+      - app
+
 networks:
   backend:
   frontend:
