@@ -28,7 +28,7 @@ services:
       context: ./redis
       dockerfile: Dockerfile
     networks:
-      backend:
+      hlitw-backend:
         aliases:
           - ${REDIS_HOST}
     environment:
@@ -42,10 +42,10 @@ services:
       context: ./rails
       dockerfile: Dockerfile
     networks:
-      frontend:
+      hlitw-frontend:
         aliases:
           - ${APP_HOST}
-      backend:
+      hlitw-backend:
         aliases:
           - ${APP_HOST}
     ports:
