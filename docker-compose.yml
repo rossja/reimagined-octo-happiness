@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+
+  postgres:
+    image: rossja/hlitw-pg:latest
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    networks:
+      hlitw-backend:
+        aliases:
+          - ${POSTGRES_HOST}
+    volumes:
+      - type: volume
+        source: hlitw-pg-datavol-01
+        target: /var/lib/postgresql/data
+        volume:
+         nocopy: true
+    environment:
+      - PGDATA=${PGDATA}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - APP_DB=${APP_DB}
+
+  redis:
+    image: rossja/hlitw-redis:latest
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    networks:
+      backend:
+        aliases:
+          - ${REDIS_HOST}
+    environment:
+      - DISABLE_COMMANDS=${DISABLE_COMMANDS}
+      - ALLOW_EMPTY_PASSWORD=${ALLOW_EMPTY_PASSWORD}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+
+  app:
+    image: rossja/hlitw-app:latest
+    build:
+      context: ./rails
+      dockerfile: Dockerfile
+    networks:
+      frontend:
+        aliases:
+          - ${APP_HOST}
+      backend:
+        aliases:
+          - ${APP_HOST}
+    ports:
+    - "9001:9001"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - RAILS_ENV=${RAILS_ENV}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - APP_DB=${APP_DB}
+
+networks:
+  backend:
+  frontend:
+
+volumes:
+  hlitw-pg-datavol-01: {}
