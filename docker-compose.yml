@@ -80,8 +80,8 @@ services:
       - app
 
 networks:
-  backend:
-  frontend:
+  hlitw-backend:
+  hlitw-frontend:
 
 volumes:
   hlitw-pg-datavol-01: {}
