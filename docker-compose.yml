@@ -73,7 +73,7 @@ services:
       - "80:8080"
       - "443:8443"
     networks:
-      frontend:
+      hlitw-frontend:
         aliases:
           - proxy
     depends_on:
