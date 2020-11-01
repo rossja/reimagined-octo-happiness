@@ -1,0 +1,21 @@
+FROM ruby:2.7
+LABEL MAINTAINER algorythm@gmail.com
+
+# BUILD WITH:
+# alias args='for var in `cat .env`; do out+="--build-arg ${var} "; done; echo ${out}; out=""'
+# docker build -t rails-toolbox -f Dockerfile.rails-toolbox $(args) .
+
+ARG RAILS_APP_USER
+ARG RAILS_APP_GROUP
+ARG RAILS_APP_UID
+ARG RAILS_APP_GID
+ARG RAILS_APP_DIR
+
+RUN addgroup --gid ${RAILS_APP_GID} ${RAILS_APP_GROUP} && adduser --disabled-password --gecos '' --uid ${RAILS_APP_UID} --gid ${RAILS_APP_GID} ${RAILS_APP_USER}
+RUN mkdir -p ${RAILS_APP_DIR} && chown -R ${RAILS_APP_USER}:${RAILS_APP_GROUP} ${RAILS_APP_DIR}
+RUN gem install rails bundler
+
+WORKDIR ${RAILS_APP_DIR}
+USER ${RAILS_APP_UID}
+
+CMD ["/bin/sh"]
