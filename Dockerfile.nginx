@@ -1,0 +1,9 @@
+FROM nginx:latest
+LABEL MAINTAINER algorythm@gmail.com
+
+COPY ingress/reverse-proxy.conf /etc/nginx/conf.d/reverse-proxy.conf
+
+EXPOSE 8020
+STOPSIGNAL SIGTERM
+
+CMD ["nginx", "-g", "daemon off;"]
