@@ -22,9 +22,10 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile-app
+      dockerfile: Dockerfile.app
       args:
         RAILS_APP_USER: ${RAILS_APP_USER}
+        RAILS_APP_GROUP: ${RAILS_APP_GROUP}
         RAILS_APP_UID: ${RAILS_APP_UID}
         RAILS_APP_GID: ${RAILS_APP_GID}
         RAILS_APP_DIR: ${RAILS_APP_DIR}
@@ -44,6 +45,7 @@ services:
       dockerfile: Dockerfile-app
       args:
         RAILS_APP_USER: ${RAILS_APP_USER}
+        RAILS_APP_GROUP: ${RAILS_APP_GROUP}
         RAILS_APP_UID: ${RAILS_APP_UID}
         RAILS_APP_GID: ${RAILS_APP_GID}
         RAILS_APP_DIR: ${RAILS_APP_DIR}
