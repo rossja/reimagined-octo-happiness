@@ -1,4 +1,4 @@
-FROM ruby:2.7 as build
+FROM ruby:2.7.2 as build
 LABEL MAINTAINER algorythm@gmail.com
 
 ARG RAILS_APP_USER
@@ -7,9 +7,8 @@ ARG RAILS_APP_UID
 ARG RAILS_APP_GID
 ARG RAILS_APP_DIR
 
-RUN addgroup --gid ${RAILS_APP_GID} ${RAILS_APP_GROUP} && adduser --disabled-password --gecos '' --uid ${RAILS_APP_UID} --gid ${RAILS_APP_GID} ${RAILS_APP_USER}
-
-ENV INSTALL_PATH ${RAILS_APP_DIR}
+RUN addgroup --gid ${RAILS_APP_GID} ${RAILS_APP_GROUP}
+RUN adduser --disabled-password --gecos '' --uid ${RAILS_APP_UID} --gid ${RAILS_APP_GID} ${RAILS_APP_USER}
 RUN mkdir -p ${RAILS_APP_DIR} && chown -R ${RAILS_APP_USER}:${RAILS_APP_GROUP} ${RAILS_APP_DIR}
 
 # nodejs

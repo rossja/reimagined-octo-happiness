@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
 
@@ -21,10 +21,13 @@ services:
 
   app:
     build:
-      context: src
+      context: .
+      dockerfile: Dockerfile-app
       args:
-        USER_ID: "${RAILS_APP_UID:-1000}"
-        GROUP_ID: "${RAILS_APP_GID:-1000}"
+        RAILS_APP_USER: ${RAILS_APP_USER}
+        RAILS_APP_UID: ${RAILS_APP_UID}
+        RAILS_APP_GID: ${RAILS_APP_GID}
+        RAILS_APP_DIR: ${RAILS_APP_DIR}
     depends_on:
       - postgres
       - redis
@@ -34,15 +37,16 @@ services:
         target: /opt/app/
     ports:
       - '8010:8010'
-    env_file:
-      - .env
 
   sidekiq:
     build:
       context: .
+      dockerfile: Dockerfile-app
       args:
-        USER_ID: "${RAILS_APP_UID:-1000}"
-        GROUP_ID: "${RAILS_APP_GID:-1000}"
+        RAILS_APP_USER: ${RAILS_APP_USER}
+        RAILS_APP_UID: ${RAILS_APP_UID}
+        RAILS_APP_GID: ${RAILS_APP_GID}
+        RAILS_APP_DIR: ${RAILS_APP_DIR}
     command: bundle exec sidekiq 
     depends_on:
       - postgres
@@ -51,8 +55,6 @@ services:
       - type: bind
         source: ./src
         target: /opt/app
-    env_file:
-      - .env
 
   nginx:
     build:
