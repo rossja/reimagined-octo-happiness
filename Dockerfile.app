@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends nodejs yarn
 RUN gem install rails bundler
 
 WORKDIR ${RAILS_APP_DIR}
-COPY src/Gemfile Gemfile
+COPY app/Gemfile Gemfile
 RUN bundle install
 RUN chown -R ${RAILS_APP_USER}:${RAILS_APP_GROUP} ${RAILS_APP_DIR}
 
@@ -32,7 +32,7 @@ ARG RAILS_APP_GID=${RAILS_APP_GID}
 ARG RAILS_APP_DIR=${RAILS_APP_DIR}
 
 WORKDIR ${RAILS_APP_DIR}
-ADD src .
+ADD app .
 
 RUN chown -R ${RAILS_APP_USER}:${RAILS_APP_GROUP} ${RAILS_APP_DIR}
 
