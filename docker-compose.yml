@@ -3,23 +3,26 @@ version: "3.8"
 services:
 
   postgres:
-    image: postgres:12.1
+    image: roh-postgres:latest
+    build:
+      context: postgres
+      dockerfile: Dockerfile.postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports: 
-      - '5432:5432'
     volumes:
-      - app-postgres:/var/lib/postgresql/data
+      - roh-postgres:/var/lib/postgresql/data
 
   redis:
-    image: redis:5.0.7
-    ports:
-      - '6379:6379'
+    image: roh-redis:latest
+    build:
+      context: redis
+      dockerfile: Dockerfile.redis
     volumes:
-      - app-redis:/var/lib/redis/data
+      - roh-redis:/var/lib/redis/data
 
   app:
+    image: roh-app:latest
     build:
       context: .
       dockerfile: Dockerfile.app
@@ -32,17 +35,15 @@ services:
     depends_on:
       - postgres
       - redis
-    volumes:
-      - type: bind
-        source: ./src
-        target: /opt/app/
     ports:
       - '8010:8010'
+    env_file: .env
 
   sidekiq:
+    image: roh-sidekiq:latest
     build:
       context: .
-      dockerfile: Dockerfile-app
+      dockerfile: Dockerfile.app
       args:
         RAILS_APP_USER: ${RAILS_APP_USER}
         RAILS_APP_GROUP: ${RAILS_APP_GROUP}
@@ -53,21 +54,21 @@ services:
     depends_on:
       - postgres
       - redis
-    volumes:
-      - type: bind
-        source: ./src
-        target: /opt/app
+    env_file: .env
 
   nginx:
+    image: roh-ingress:latest
     build:
-      context: .
-      dockerfile: ./Dockerfile.nginx
+      context: ingress
+      dockerfile: Dockerfile.nginx
     depends_on:
       - app
     ports:
-      # - '80:8020'
-      - '8020:8020'
+      - '80:80'
+    volumes:
+      - roh-nginx-logs:/var/log/nginx
 
 volumes:
-  app-postgres:
-  app-redis:
+  roh-postgres:
+  roh-redis:
+  roh-nginx-logs:

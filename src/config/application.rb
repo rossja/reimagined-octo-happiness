@@ -15,11 +15,7 @@ module App
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
-  end
-end
-
-module App
-  class Application < Rails::Application
+  
     # We want to set up a custom logger which logs to STDOUT.
     # Docker expects your application to log to STDOUT/STDERR and to be ran
     # in the foreground.

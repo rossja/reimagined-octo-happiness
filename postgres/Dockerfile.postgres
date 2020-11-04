@@ -1,0 +1,2 @@
+FROM postgres:12.1
+LABEL MAINTAINER algorythm@gmail.com
