@@ -1,5 +1,7 @@
 # REIMAGINED-OCTO-HAPPINESS
 
+A dockerized rails setup tool.
+
 ## Building the toolbox
 
 Run the following command to build the toolbox container: 
